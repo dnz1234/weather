@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <h2 style="color: aliceblue;" class="head">Weather app</h2>
+        
+        <div class="search">
+            <input id="input" type="text" class="search-bar" placeholder="Enter city name">
+            <button type="button" id="sbutton" onclick="search()" class="search-button">Search</button>
+        </div>
+        <div id="resultarea">
+            <div id="count" class="row">
+            </div>
+            <div class="row">
+                <div id="wimg" class="col"> </div>
+                <div id="temp" class="col"></div>
+            </div>
+
+            <div class="row">
+                <div class="col"></div>
+                <div id="today" class="col"></div>
+            </div>
+            <div class="row">
+                <div id="tim" class="col"></div>
+                <div id="dat" class="col"></div>
+            </div>
+            <div id="details" class="row">
+                <div class="col" id="wind"></div>
+                <div class="col" id="humidity"></div>
+                <div class="col" id="pressure"></div>
+            </div>
+            
+
+        </div>
+    </div>
+</body>
+<script>
+
+
+
+
+    function search(){
+
+
+cityname = input.value
+const http = new XMLHttpRequest();
+http.open('GET',`https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=37e5414a7e54107b22bdc2764a457f92&units=metric`)
+http.send();
+console.log(http.readyState);
+http.onreadystatechange = ()=>{
+    console.log(http.readyState);
+    if (http.readyState == 4) {
+        console.log(http.status);
+        if (http.status>= 200 && http.status<300) {
+            console.log(http.responseText);
+            let data = JSON.parse(http.responseText)
+            console.log(data);
+            let city = data.name
+            console.log(name);
+            let country = data.sys.country
+            console.log(country);
+            let temptrature = data.main.temp
+            console.log(temptrature);
+            let wspeed = data.wind.speed
+            console.log(wspeed);
+            let humdity = data.main.humidity
+            console.log(humdity);
+            let pressure = data.main.pressure
+            console.log(pressure);
+            let icon = data.weather[0].main
+            console.log(icon);
+            resultarea.style.display = "block";
+
+            if (data.weather[0].main === "Rain") {
+    wimg.innerHTML = `<img src="./images/rain.png">`;
+} else if (data.weather[0].main === "Clouds") {
+    wimg.innerHTML = `<img src="./images/cloud.png">`;
+} else if (data.weather[0].main === "Clear") {
+    wimg.innerHTML = `<img src="./images/clear.png">`;
+} else if (data.weather[0].main === "Drizzle") {
+    wimg.innerHTML = `<img src="./images/drizzle.png">`;
+}else if (data.weather[0].main === "Thunderstorm") {
+    wimg.innerHTML = `<img src="./images/thunderstom.png">`;
+} else if (data.weather[0].main === "Haze") {
+    wimg.innerHTML = `<img src="./images/mist.png">`;
+} else if (data.weather[0].main === "Snow") {
+    wimg.innerHTML = `<img src="./images/snow.png">`;
+} else if (data.weather[0].main === "Smoke") {
+    wimg.innerHTML = `<img src="./images/mist.png">`;
+} 
+
+            document.getElementById("count").innerHTML = `<h1 class="text-center">${city},${country}</h1>`;
+            document.getElementById("temp").innerHTML = `<h1>${temptrature}°C</h1>`;
+            document.getElementById("wind").innerHTML = `<h4>Wind: ${wspeed} km/h</h4>`;
+            document.getElementById("humidity").innerHTML = `<h4>Humidity: ${humdity}%</h4>`;
+            document.getElementById("pressure").innerHTML = `<h4>Pressure: ${pressure} hPa</h4>`;
+
+
+        }
+        else{
+            alert('Enter a valid input');
+        }
+        
+    }
+
+}
+
+
+}
+
+function getTime(){  const time = new Date()
+    console.log(time);
+  let hour = time.getHours()
+    console.log(hour);
+  let min = time.getMinutes()
+  console.log(min);
+  let sec = time.getSeconds()
+  console.log(sec);
+  
+  var currentDate = new Date();
+var year = currentDate.getFullYear();     // Get the current year (e.g., 2023)
+var month = currentDate.getMonth();       // Get the current month (0-11, where 0 is January)
+var day = currentDate.getDate();  
+var dayOfWeek = currentDate.getDay();
+var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+var currentDayName = daysOfWeek[dayOfWeek];
+
+    document.getElementById("today").innerHTML =`<h2>${currentDayName}</h2>`
+    document.getElementById("tim").innerHTML=`<h2>${hour}:${min}:${sec}</h2>`
+
+    document.getElementById("dat").innerHTML = `<h2>  ${day}/${month}/23</h2>`
+  setTimeout(()=>{getTime()},1000)}
+  
+
+getTime()
+
+
+
+
+
+</script>
+</html>
